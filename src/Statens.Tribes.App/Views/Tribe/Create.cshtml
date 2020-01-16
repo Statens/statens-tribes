@@ -1,0 +1,19 @@
+﻿@using Statens.Tribes.App.Domain.Model
+@model CreateTribeModel
+
+@{
+    ViewBag.Title = "Create";
+    Layout = "_Layout";
+}
+
+<h2>@ViewBag.Title</h2>
+
+@using (Html.BeginForm())
+{
+@Html.TextBoxFor(m => m.Name)
+@Html.DropDownListFor(model => model.TribeType,
+        new SelectList(Enum.GetValues(typeof(TribeType))),
+        "Select Type")
+
+<input type="submit" value="Submit strongly type synchronous form" />
+}

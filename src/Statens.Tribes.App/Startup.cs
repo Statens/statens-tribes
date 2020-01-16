@@ -14,6 +14,7 @@ using Statens.Tribes.App.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.WindowsAzure.Storage;
+using Statens.Tribes.App.Domain.Interfaces;
 
 namespace Statens.Tribes.App
 {
@@ -52,6 +53,8 @@ namespace Statens.Tribes.App
             services.AddDefaultIdentity<IdentityUser>()
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
+
+            services.AddTransient<ITribeRepository>(provider => new TribeRepository());
 
             var account = CloudStorageAccount.Parse(Configuration["AzureStorageConnectionString"]);
             var blobClient = account.CreateCloudBlobClient();
