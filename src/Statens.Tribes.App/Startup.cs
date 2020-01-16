@@ -20,7 +20,6 @@ namespace Statens.Tribes.App
 {
     public class Startup
     {
-
         public IConfiguration Configuration { get; }
         public IHostingEnvironment Environment { get; }
 
@@ -54,11 +53,12 @@ namespace Statens.Tribes.App
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddTransient<ITribeRepository>(provider => new TribeRepository());
-
             var account = CloudStorageAccount.Parse(Configuration["AzureStorageConnectionString"]);
             var blobClient = account.CreateCloudBlobClient();
             services.AddSingleton(blobClient.GetType(), blobClient);
+
+            // services.AddScoped<ITribeRepository, TribeRepository>();
+            services.AddSingleton<ITribeRepository, TribeRepository>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }

@@ -1,13 +1,16 @@
 ﻿@model List<TribeViewModel>
 
 @{
-    ViewBag.Title = "title";
+    ViewBag.Title = "Tribes";
     Layout = "_Layout";
 }
 
-<h2>title</h2>
+<h1>@ViewBag.Title</h1>
 
 @foreach (var tribe in Model)
 {
-    <p>@tribe.Name</p>
+    <p>
+        <h3>@tribe.Name</h3>
+       @tribe.Id
+    </p>
 }

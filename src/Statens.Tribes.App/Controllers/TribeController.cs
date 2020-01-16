@@ -1,6 +1,8 @@
 using System;
 using System.Diagnostics;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Statens.Tribes.App.Domain.Interfaces;
 using Statens.Tribes.App.Domain.Model;
@@ -8,6 +10,7 @@ using Statens.Tribes.App.Models;
 
 namespace Statens.Tribes.App.Controllers
 {
+    [Authorize]
     public class TribeController : Controller
     {
         private readonly ITribeRepository tribeRepository;
@@ -17,14 +20,16 @@ namespace Statens.Tribes.App.Controllers
             this.tribeRepository = tribeRepository;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var tribes = tribeRepository.ReadAll()
-                .Select(x => new TribeViewModel
+            var tribes = await tribeRepository.ReadAllAsync();
+
+            var model = tribes.Select(x => new TribeViewModel
                 {
-                    Name = x.Name
+                    Name = x.Name,
+                    Id = x.Id
                 }).ToList();
-            return View(model: tribes);
+            return View(model: model);
         }
 
         [HttpGet]
@@ -35,9 +40,9 @@ namespace Statens.Tribes.App.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(CreateTribeModel model)
+        public async Task<IActionResult> Create(CreateTribeModel model)
         {
-            tribeRepository.Save(new Tribe()
+            await tribeRepository.SaveAsync(new Tribe()
             {
                 Id = Guid.NewGuid().ToString(),
                 Name = model.Name,
