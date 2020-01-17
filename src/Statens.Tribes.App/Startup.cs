@@ -14,7 +14,10 @@ using Statens.Tribes.App.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.WindowsAzure.Storage;
+using Statens.Tribes.App.Domain.Infrastructure;
 using Statens.Tribes.App.Domain.Interfaces;
+using Statens.Tribes.App.Domain.Model;
+using Statens.Tribes.App.Domain.Services;
 
 namespace Statens.Tribes.App
 {
@@ -59,6 +62,13 @@ namespace Statens.Tribes.App
 
             // services.AddScoped<ITribeRepository, TribeRepository>();
             services.AddSingleton<ITribeRepository, TribeRepository>();
+
+            services.AddSingleton<IRepositoryOfType<TribeMembershipList>, TribeMembershipListRepository>();
+            services.AddSingleton<IRepositoryOfType<Tribe>, TribeRepository>();
+
+            // services.AddSingleton(blobClient.GetType(), blobClient);
+            // services.AddSingleton<TribeService, TribeService>();
+            services.AddSingleton<TribeService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
         }
