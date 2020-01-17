@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -45,21 +44,18 @@ namespace Statens.Tribes.App.Domain.Interfaces
             return cloudBlobClient.GetContainerReference(GetType().Name.ToLowerInvariant());
         }
 
-        private static readonly List<Tribe> tribes = new List<Tribe>()
-        {
-            new Tribe
-            {
-                Id = Guid.NewGuid().ToString(),
-                Name = "Tribe 1"
-            }
-        };
-
         public async Task<Tribe> SaveAsync(Tribe tribe)
         {
+            var cacheKey = typeof(Tribe).Name + "-" + tribe.Id;
             var contents = Newtonsoft.Json.JsonConvert.SerializeObject(tribe);
             var blob = GetTribeContainerReference(_cloudBlobClient).GetBlockBlobReference(tribe.Id);
 
             await blob.UploadTextAsync(contents);
+
+            if (!string.IsNullOrEmpty(contents))
+            {
+                await _distributedCache.SetStringAsync(cacheKey, contents);
+            }
 
             return await ReadAsync(tribe.Id);
         }

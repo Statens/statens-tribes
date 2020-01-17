@@ -12,5 +12,10 @@
     <p>
         <h3>@tribe.Name</h3>
        @tribe.Id
+       
+       <div>
+           
+           @Html.ActionLink("Edit", "Update", new { id=tribe.Id })
+       </div>
     </p>
 }
