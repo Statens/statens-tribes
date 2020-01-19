@@ -15,10 +15,10 @@ namespace Statens.Tribes.App.Controllers
     [Authorize]
     public class TribeController : Controller
     {
-        private readonly ITribeRepository tribeRepository;
+        private readonly IRepositoryOfType<Tribe> tribeRepository;
         private readonly TribeService _tribeService;
 
-        public TribeController(ITribeRepository tribeRepository, TribeService tribeService)
+        public TribeController(IRepositoryOfType<Tribe> tribeRepository, TribeService tribeService)
         {
             this.tribeRepository = tribeRepository;
             _tribeService = tribeService;
@@ -30,9 +30,6 @@ namespace Statens.Tribes.App.Controllers
 
             foreach (var tribe in tribes.Where(t => t.Members == null || t.Members.Count < 1))
             {
-                //if (tribe.Members == null || tribe.Members.Count < 1)
-                //{
-                //}
                 tribe.Members = new List<TribeMember>
                 {
                     new TribeMember
@@ -69,7 +66,7 @@ namespace Statens.Tribes.App.Controllers
 
             await tribeRepository.SaveAsync(new Tribe
             {
-                Id = Guid.NewGuid().ToString(),
+                Id = typeof(Tribe).Name + "-" + Guid.NewGuid().ToString(),
                 Name = model.Name,
                 Type = model.TribeType
             });

@@ -60,14 +60,8 @@ namespace Statens.Tribes.App
             var blobClient = account.CreateCloudBlobClient();
             services.AddSingleton(blobClient.GetType(), blobClient);
 
-            // services.AddScoped<ITribeRepository, TribeRepository>();
-            services.AddSingleton<ITribeRepository, TribeRepository>();
-
             services.AddSingleton<IRepositoryOfType<TribeMembershipList>, TribeMembershipListRepository>();
             services.AddSingleton<IRepositoryOfType<Tribe>, TribeRepository>();
-
-            // services.AddSingleton(blobClient.GetType(), blobClient);
-            // services.AddSingleton<TribeService, TribeService>();
             services.AddSingleton<TribeService>();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);

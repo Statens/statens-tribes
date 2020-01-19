@@ -6,7 +6,7 @@ namespace Statens.Tribes.App.Models
     public class CreateTribeModel
     {
         [Required]
-        [StringLength(5)]
+        [StringLength(30)]
         public string Name { get; set; }
 
         [Required]

@@ -26,16 +26,26 @@ namespace Statens.Tribes.App.Domain.Infrastructure
             _cloudBlobClient = cloudBlobClient;
             _distributedCache = distributedCache;
             _logger = logger;
+
             var container = GetContainerReference(_cloudBlobClient);
             container.CreateIfNotExistsAsync().Wait();
+
+            /*
+            var data = GetContainerReference(_cloudBlobClient).ListBlobsSegmentedAsync(null);
+            var docs = data.Result.Results.OfType<CloudBlockBlob>();
+            foreach(var e in docs)
+            {
+                GetContainerReference(_cloudBlobClient).GetBlobReference(e.Name).DeleteAsync().Wait();
+            }
+            */
         }
 
         protected abstract string GetEntityKey(T entity);
 
         public async Task<List<T>> ReadAllAsync()
         {
-            var data = GetContainerReference(_cloudBlobClient).ListBlobsSegmentedAsync(null);
-            var docs = data.Result.Results.OfType<CloudBlockBlob>().Select(x => x.Name);
+            var data = await GetContainerReference(_cloudBlobClient).ListBlobsSegmentedAsync(null);
+            var docs = data.Results.OfType<CloudBlockBlob>().Select(x => x.Name);
 
             var tasks = docs.Select(ReadAsync);
 
@@ -44,23 +54,26 @@ namespace Statens.Tribes.App.Domain.Infrastructure
             return res.ToList();
         }
 
-        public async Task<T> ReadAsync(string id)
+        public async Task<T> ReadAsync(string entityKey)
         {
-            var entityKey = typeof(T).Name + "-" + id;
+            // var entityKey = typeof(T).Name + "-" + id;
+
             var cachedContents = await _distributedCache.GetStringAsync(entityKey);
+            
             if (!string.IsNullOrEmpty(cachedContents))
             {
-                _logger.LogInformation($"Found id {entityKey} cache");
+                _logger.LogInformation($"Found entityKey {entityKey} in cache");
                 return Newtonsoft.Json.JsonConvert.DeserializeObject<T>(cachedContents);
             }
 
-            var blob = GetContainerReference(_cloudBlobClient).GetBlockBlobReference(id);
+            var blob = GetContainerReference(_cloudBlobClient).GetBlockBlobReference(entityKey);
 
             var contents = await blob.DownloadTextAsync();
             var data = Newtonsoft.Json.JsonConvert.DeserializeObject<T>(contents);
 
             if (!string.IsNullOrEmpty(contents))
             {
+                _logger.LogInformation($"Write entityKey {entityKey} to cache {contents}");
                 await _distributedCache.SetStringAsync(entityKey, contents);
             }
 
@@ -70,13 +83,14 @@ namespace Statens.Tribes.App.Domain.Infrastructure
         public async Task<T> SaveAsync(T entity)
         {
             var entityKey = GetEntityKey(entity);
-            var contents = Newtonsoft.Json.JsonConvert.SerializeObject(entity);
             var blob = GetContainerReference(_cloudBlobClient).GetBlockBlobReference(entityKey);
 
+            var contents = Newtonsoft.Json.JsonConvert.SerializeObject(entity);
             await blob.UploadTextAsync(contents);
 
             if (!string.IsNullOrEmpty(contents))
             {
+                _logger.LogInformation($"Write entityKey {entityKey} to cache {contents}");
                 await _distributedCache.SetStringAsync(entityKey, contents);
             }
 
