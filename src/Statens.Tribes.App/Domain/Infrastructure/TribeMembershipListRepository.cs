@@ -1,10 +1,6 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.WindowsAzure.Storage.Blob;
-using Statens.Tribes.App.Domain.Interfaces;
 using Statens.Tribes.App.Domain.Model;
 
 namespace Statens.Tribes.App.Domain.Infrastructure
@@ -13,10 +9,9 @@ namespace Statens.Tribes.App.Domain.Infrastructure
     {
         public TribeMembershipListRepository(
             IConfiguration configuration, 
-            CloudBlobClient cloudBlobClient, 
             IDistributedCache distributedCache, 
             ILogger<TribeMembershipListRepository> logger) 
-            : base(configuration, cloudBlobClient, distributedCache, logger)
+            : base(configuration, distributedCache, logger)
         {
         }
 

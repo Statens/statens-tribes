@@ -1,19 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Statens.Tribes.App.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.WindowsAzure.Storage;
 using Statens.Tribes.App.Domain.Infrastructure;
 using Statens.Tribes.App.Domain.Interfaces;
 using Statens.Tribes.App.Domain.Model;
@@ -56,9 +50,9 @@ namespace Statens.Tribes.App
                 .AddDefaultUI(UIFramework.Bootstrap4)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            var account = CloudStorageAccount.Parse(Configuration["AzureStorageConnectionString"]);
-            var blobClient = account.CreateCloudBlobClient();
-            services.AddSingleton(blobClient.GetType(), blobClient);
+            //var account = CloudStorageAccount.Parse(Configuration["AzureStorageConnectionString"]);
+            //var blobClient = account.CreateCloudBlobClient();
+            //services.AddSingleton(blobClient.GetType(), blobClient);
 
             services.AddSingleton<IRepositoryOfType<TribeMembershipList>, TribeMembershipListRepository>();
             services.AddSingleton<IRepositoryOfType<Tribe>, TribeRepository>();
