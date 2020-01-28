@@ -49,3 +49,25 @@ https://stackoverflow.com/questions/11918349/styling-individual-letters-in-word
 https://www.123rf.com/photo_127892052_stock-vector-mechanical-realistic-flip-scoreboard-arrival-airport-board-with-letters-numbers-time-display-board-f.html
 
 https://medium.com/@whuysentruit/from-query-to-mutation-with-graphql-conventions-and-asp-net-core-87845f0a2fbd
+
+
+
+## Azure Management Fluent
+
+https://github.com/Azure/azure-libraries-for-net/blob/master/AUTH.md
+
+https://github.com/Azure-Samples/dns-dotnet-host-and-manage-your-domains/blob/master/Program.cs
+
+https://github.com/Azure-Samples/app-service-dotnet-manage-web-apps-with-custom-domains
+
+https://github.com/Azure-Samples/app-service-dotnet-manage-web-apps/blob/master/Program.cs
+
+https://github.com/Azure-Samples/app-service-dotnet-configure-deployment-sources-for-web-apps
+
+https://github.com/Azure-Samples/app-service-dotnet-configure-deployment-sources-for-web-apps-async/blob/master/Program.cs
+
+## Docker
+
+https://www.pluralsight.com/blog/software-development/docker-3-things-to-get-started?minimal=true&oid=7010c0000022TLPAA2&promo=&utm_campaign=b2b-newsletter-skills&utm_content=newsletter&utm_medium=digital_email&utm_source=email&utm_term=&vid=7010c0000022WJMAA2
+
+https://www.pluralsight.com/resource-center/webinars/getting-started-docker-containers/thank-you
